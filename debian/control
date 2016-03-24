@@ -1,0 +1,39 @@
+Source: python-django-gravatar2
+Section: python
+Priority: optional
+Maintainer: Pierre-Elliott Bécue <becue@crans.org>
+Build-Depends: debhelper (>= 9),
+               python-all (>= 2.7),
+               python-setuptools,
+               python3-all (>= 3.2),
+               python3-setuptools
+Standards-Version: 3.9.7
+Homepage: https://github.com/twaddington/django-gravatar
+Vcs-Browser: https://github.com/P-EB/python-django-gravatar2
+Vcs-Git: https://github.com/P-EB/python-django-gravatar2.git -b master
+X-Python-Version: >= 2.7
+X-Python3-Version: >= 3.2
+
+Package: python-django-gravatar2
+Architecture: all
+Depends: ${misc:Depends},
+         ${python:Depends}
+Description: Python2 library that provides essential Gravatar support
+ Python django library that provides support for Gravatars.
+ .
+ It features:
+   * Helper methods for constructing a gravatar url and checking an email
+     for an existing gravatar
+   * Templatetags for generating a gravatar url or gravatar <img> tag.
+
+Package: python3-django-gravatar2
+Architecture: all
+Depends: ${misc:Depends},
+         ${python3:Depends}
+Description: Python3 library that provides essential Gravatar support
+ Python3 django library that provides support for Gravatars.
+ .
+ It features:
+   * Helper methods for constructing a gravatar url and checking an email
+     for an existing gravatar
+   * Templatetags for generating a gravatar url or gravatar <img> tag.

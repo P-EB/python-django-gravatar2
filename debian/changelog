@@ -1,0 +1,5 @@
+python-django-gravatar2 (1.4.0-2) unstable; urgency=low
+
+  * Initial release (Closes: #819183)
+
+ -- Pierre-Elliott Bécue <becue@crans.org>  Wed, 23 Mar 2016 22:37:40 -0400
