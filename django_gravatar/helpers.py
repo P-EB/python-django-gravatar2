@@ -20,15 +20,30 @@ GRAVATAR_RATING_X = 'x'
 
 # Get Gravatar base url from settings.py
 GRAVATAR_URL = getattr(settings, 'GRAVATAR_URL', 'http://www.gravatar.com/')
-GRAVATAR_SECURE_URL = getattr(settings, 'GRAVATAR_SECURE_URL', 'https://secure.gravatar.com/')
+GRAVATAR_SECURE_URL = getattr(
+    settings,
+    'GRAVATAR_SECURE_URL',
+    'https://secure.gravatar.com/',
+)
 
 # Get user defaults from settings.py
 GRAVATAR_DEFAULT_SIZE = getattr(settings, 'GRAVATAR_DEFAULT_SIZE', 80)
-GRAVATAR_DEFAULT_IMAGE = getattr(settings, 'GRAVATAR_DEFAULT_IMAGE',
-        GRAVATAR_DEFAULT_IMAGE_MYSTERY_MAN)
-GRAVATAR_DEFAULT_RATING = getattr(settings, 'GRAVATAR_DEFAULT_RATING',
-        GRAVATAR_RATING_G)
-GRAVATAR_DEFAULT_SECURE = getattr(settings, 'GRAVATAR_DEFAULT_SECURE', True)
+GRAVATAR_DEFAULT_IMAGE = getattr(
+    settings,
+    'GRAVATAR_DEFAULT_IMAGE',
+    GRAVATAR_DEFAULT_IMAGE_MYSTERY_MAN,
+)
+
+GRAVATAR_DEFAULT_RATING = getattr(
+    settings,
+    'GRAVATAR_DEFAULT_RATING',
+    GRAVATAR_RATING_G,
+)
+GRAVATAR_DEFAULT_SECURE = getattr(
+    settings,
+    'GRAVATAR_DEFAULT_SECURE',
+    True,
+)
 
 
 def calculate_gravatar_hash(email):
@@ -38,14 +53,19 @@ def calculate_gravatar_hash(email):
     return email_hash
 
 
-def get_gravatar_url(email, size=GRAVATAR_DEFAULT_SIZE, default=GRAVATAR_DEFAULT_IMAGE,
-        rating=GRAVATAR_DEFAULT_RATING, secure=GRAVATAR_DEFAULT_SECURE):
+def get_gravatar_url(email,
+                     size=GRAVATAR_DEFAULT_SIZE,
+                     default=GRAVATAR_DEFAULT_IMAGE,
+                     rating=GRAVATAR_DEFAULT_RATING,
+                     secure=GRAVATAR_DEFAULT_SECURE,
+                     ):
     """
     Builds a url to a gravatar from an email address.
 
     :param email: The email to fetch the gravatar for
     :param size: The size (in pixels) of the gravatar to fetch
-    :param default: What type of default image to use if the gravatar does not exist
+    :param default: What type of default image to use if the gravatar does not
+           exist
     :param rating: Used to filter the allowed gravatar ratings
     :param secure: If True use https, otherwise plain http
     """
@@ -65,8 +85,11 @@ def get_gravatar_url(email, size=GRAVATAR_DEFAULT_SIZE, default=GRAVATAR_DEFAULT
     })
 
     # Build url
-    url = '{base}avatar/{hash}.jpg?{qs}'.format(base=url_base,
-            hash=email_hash, qs=query_string)
+    url = '{base}avatar/{hash}.jpg?{qs}'.format(
+        base=url_base,
+        hash=email_hash,
+        qs=query_string,
+    )
 
     return url
 
