@@ -3,7 +3,18 @@ from django.test import TestCase
 from django.utils.html import escape
 
 from .compat import parse_qs, quote_plus, urlparse
-from .helpers import *
+from .helpers import (
+    calculate_gravatar_hash,
+    get_gravatar_url,
+    has_gravatar,
+    get_gravatar_profile_url,
+    GRAVATAR_DEFAULT_SIZE,
+    GRAVATAR_DEFAULT_IMAGE,
+    GRAVATAR_DEFAULT_RATING,
+    GRAVATAR_DEFAULT_SECURE,
+    GRAVATAR_SECURE_URL,
+    GRAVATAR_URL,
+)
 
 
 class TestGravatarHelperMethods(TestCase):
@@ -16,7 +27,10 @@ class TestGravatarHelperMethods(TestCase):
         email_hash = "0bc83cb571cd1c50ba6f3e8a78ef1346"
 
         self.assertEqual(calculate_gravatar_hash(email), email_hash)
-        self.assertEqual(calculate_gravatar_hash(email), calculate_gravatar_hash(email.lower()))
+        self.assertEqual(
+            calculate_gravatar_hash(email),
+            calculate_gravatar_hash(email.lower()),
+        )
 
     def test_gravatar_url(self):
         """
@@ -37,7 +51,8 @@ class TestGravatarHelperMethods(TestCase):
         urlp = urlparse(url)
         qs = parse_qs(urlp.query)
 
-        # Verify the correct query arguments are included with the proper defaults
+        # Verify the correct query arguments are included with the proper
+        # defaults
         self.assertTrue('s' in qs)
         self.assertTrue('d' in qs)
         self.assertTrue('r' in qs)
@@ -115,7 +130,9 @@ class TestGravatarTemplateTags(TestCase):
         self.assertTrue('class="gravatar"' in rendered)
         self.assertTrue('alt=""' in rendered)
 
-        t = Template("{% load gravatar %}{% gravatar email size alt_text css_class %}")
+        t = Template(
+            "{% load gravatar %}{% gravatar email size alt_text css_class %}",
+        )
         rendered = t.render(context)
 
         self.assertTrue('width="%s"' % (size,) in rendered)
@@ -153,12 +170,15 @@ class TestGravatarTemplateTags(TestCase):
         t = Template("{% load gravatar %}{% gravatar email %}")
         rendered = t.render(context)
 
-        self.assertEqual("", rendered, "Invalid input should return empty result")
+        self.assertEqual(
+            "",
+            rendered,
+            "Invalid input should return empty result",
+        )
 
     def test_gravatar_profile_url(self):
-        """
-        Verify the profile url generated from template gravatar_profile_url tag.
-        """
+        """Verify the profile url generated from template gravatar_profile_url
+        tag."""
         # class with email attribute
         class user:
             email = 'bouke@webatoom.nl'
@@ -168,4 +188,11 @@ class TestGravatarTemplateTags(TestCase):
         t = Template("{% load gravatar %}{% gravatar_profile_url user %}")
         rendered = t.render(context)
 
-        self.assertEqual(rendered, escape(get_gravatar_profile_url(user.email)))
+        self.assertEqual(
+            rendered,
+            escape(
+                get_gravatar_profile_url(
+                    user.email
+                )
+            )
+        )

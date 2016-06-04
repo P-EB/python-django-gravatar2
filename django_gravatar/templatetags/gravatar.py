@@ -2,7 +2,11 @@ from django import template
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
-from ..helpers import GRAVATAR_DEFAULT_SIZE, get_gravatar_profile_url, get_gravatar_url
+from ..helpers import (
+    GRAVATAR_DEFAULT_SIZE,
+    get_gravatar_profile_url,
+    get_gravatar_url,
+)
 
 # Get template.Library instance
 register = template.Library()
@@ -21,7 +25,11 @@ def gravatar_url(user_or_email, size=GRAVATAR_DEFAULT_SIZE):
         return ''
 
 
-def gravatar(user_or_email, size=GRAVATAR_DEFAULT_SIZE, alt_text='', css_class='gravatar'):
+def gravatar(user_or_email,
+             size=GRAVATAR_DEFAULT_SIZE,
+             alt_text='',
+             css_class='gravatar',
+             ):
     """ Builds an gravatar <img> tag from an user or email """
     if hasattr(user_or_email, 'email'):
         email = user_or_email.email

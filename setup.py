@@ -15,6 +15,7 @@ setup(
     author_email='tristan.waddington@gmail.com',
     url='https://github.com/twaddington/django-gravatar',
     packages=['django_gravatar', 'django_gravatar.templatetags'],
+    install_requires=['django',],
     classifiers=[
         'Development Status :: 5 - Production/Stable', # 4 Beta, 5 Production/Stable
         'Environment :: Web Environment',

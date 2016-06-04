@@ -1,0 +1,222 @@
+From 4c00f78c7b6408429a20d2d7652c791f0131acdd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Pierre-Elliott=20B=C3=A9cue?= <becue@crans.org>
+Date: Sat, 4 Jun 2016 13:18:21 +0200
+Subject: [d-p] Cleans PEP8 and import * issues.
+
+---
+ django_gravatar/helpers.py               | 45 ++++++++++++++++++++++++--------
+ django_gravatar/templatetags/gravatar.py | 12 +++++++--
+ django_gravatar/tests.py                 | 45 +++++++++++++++++++++++++-------
+ setup.py                                 |  1 +
+ 4 files changed, 81 insertions(+), 22 deletions(-)
+
+diff --git a/django_gravatar/helpers.py b/django_gravatar/helpers.py
+index 3abeaa4..14c33e0 100644
+--- a/django_gravatar/helpers.py
++++ b/django_gravatar/helpers.py
+@@ -20,15 +20,30 @@ GRAVATAR_RATING_X = 'x'
+ 
+ # Get Gravatar base url from settings.py
+ GRAVATAR_URL = getattr(settings, 'GRAVATAR_URL', 'http://www.gravatar.com/')
+-GRAVATAR_SECURE_URL = getattr(settings, 'GRAVATAR_SECURE_URL', 'https://secure.gravatar.com/')
++GRAVATAR_SECURE_URL = getattr(
++    settings,
++    'GRAVATAR_SECURE_URL',
++    'https://secure.gravatar.com/',
++)
+ 
+ # Get user defaults from settings.py
+ GRAVATAR_DEFAULT_SIZE = getattr(settings, 'GRAVATAR_DEFAULT_SIZE', 80)
+-GRAVATAR_DEFAULT_IMAGE = getattr(settings, 'GRAVATAR_DEFAULT_IMAGE',
+-        GRAVATAR_DEFAULT_IMAGE_MYSTERY_MAN)
+-GRAVATAR_DEFAULT_RATING = getattr(settings, 'GRAVATAR_DEFAULT_RATING',
+-        GRAVATAR_RATING_G)
+-GRAVATAR_DEFAULT_SECURE = getattr(settings, 'GRAVATAR_DEFAULT_SECURE', True)
++GRAVATAR_DEFAULT_IMAGE = getattr(
++    settings,
++    'GRAVATAR_DEFAULT_IMAGE',
++    GRAVATAR_DEFAULT_IMAGE_MYSTERY_MAN,
++)
++
++GRAVATAR_DEFAULT_RATING = getattr(
++    settings,
++    'GRAVATAR_DEFAULT_RATING',
++    GRAVATAR_RATING_G,
++)
++GRAVATAR_DEFAULT_SECURE = getattr(
++    settings,
++    'GRAVATAR_DEFAULT_SECURE',
++    True,
++)
+ 
+ 
+ def calculate_gravatar_hash(email):
+@@ -38,14 +53,19 @@ def calculate_gravatar_hash(email):
+     return email_hash
+ 
+ 
+-def get_gravatar_url(email, size=GRAVATAR_DEFAULT_SIZE, default=GRAVATAR_DEFAULT_IMAGE,
+-        rating=GRAVATAR_DEFAULT_RATING, secure=GRAVATAR_DEFAULT_SECURE):
++def get_gravatar_url(email,
++                     size=GRAVATAR_DEFAULT_SIZE,
++                     default=GRAVATAR_DEFAULT_IMAGE,
++                     rating=GRAVATAR_DEFAULT_RATING,
++                     secure=GRAVATAR_DEFAULT_SECURE,
++                     ):
+     """
+     Builds a url to a gravatar from an email address.
+ 
+     :param email: The email to fetch the gravatar for
+     :param size: The size (in pixels) of the gravatar to fetch
+-    :param default: What type of default image to use if the gravatar does not exist
++    :param default: What type of default image to use if the gravatar does not
++           exist
+     :param rating: Used to filter the allowed gravatar ratings
+     :param secure: If True use https, otherwise plain http
+     """
+@@ -65,8 +85,11 @@ def get_gravatar_url(email, size=GRAVATAR_DEFAULT_SIZE, default=GRAVATAR_DEFAULT
+     })
+ 
+     # Build url
+-    url = '{base}avatar/{hash}.jpg?{qs}'.format(base=url_base,
+-            hash=email_hash, qs=query_string)
++    url = '{base}avatar/{hash}.jpg?{qs}'.format(
++        base=url_base,
++        hash=email_hash,
++        qs=query_string,
++    )
+ 
+     return url
+ 
+diff --git a/django_gravatar/templatetags/gravatar.py b/django_gravatar/templatetags/gravatar.py
+index bd41d14..2f570c2 100644
+--- a/django_gravatar/templatetags/gravatar.py
++++ b/django_gravatar/templatetags/gravatar.py
+@@ -2,7 +2,11 @@ from django import template
+ from django.utils.html import escape
+ from django.utils.safestring import mark_safe
+ 
+-from ..helpers import GRAVATAR_DEFAULT_SIZE, get_gravatar_profile_url, get_gravatar_url
++from ..helpers import (
++    GRAVATAR_DEFAULT_SIZE,
++    get_gravatar_profile_url,
++    get_gravatar_url,
++)
+ 
+ # Get template.Library instance
+ register = template.Library()
+@@ -21,7 +25,11 @@ def gravatar_url(user_or_email, size=GRAVATAR_DEFAULT_SIZE):
+         return ''
+ 
+ 
+-def gravatar(user_or_email, size=GRAVATAR_DEFAULT_SIZE, alt_text='', css_class='gravatar'):
++def gravatar(user_or_email,
++             size=GRAVATAR_DEFAULT_SIZE,
++             alt_text='',
++             css_class='gravatar',
++             ):
+     """ Builds an gravatar <img> tag from an user or email """
+     if hasattr(user_or_email, 'email'):
+         email = user_or_email.email
+diff --git a/django_gravatar/tests.py b/django_gravatar/tests.py
+index 9912104..9cc8c00 100644
+--- a/django_gravatar/tests.py
++++ b/django_gravatar/tests.py
+@@ -3,7 +3,18 @@ from django.test import TestCase
+ from django.utils.html import escape
+ 
+ from .compat import parse_qs, quote_plus, urlparse
+-from .helpers import *
++from .helpers import (
++    calculate_gravatar_hash,
++    get_gravatar_url,
++    has_gravatar,
++    get_gravatar_profile_url,
++    GRAVATAR_DEFAULT_SIZE,
++    GRAVATAR_DEFAULT_IMAGE,
++    GRAVATAR_DEFAULT_RATING,
++    GRAVATAR_DEFAULT_SECURE,
++    GRAVATAR_SECURE_URL,
++    GRAVATAR_URL,
++)
+ 
+ 
+ class TestGravatarHelperMethods(TestCase):
+@@ -16,7 +27,10 @@ class TestGravatarHelperMethods(TestCase):
+         email_hash = "0bc83cb571cd1c50ba6f3e8a78ef1346"
+ 
+         self.assertEqual(calculate_gravatar_hash(email), email_hash)
+-        self.assertEqual(calculate_gravatar_hash(email), calculate_gravatar_hash(email.lower()))
++        self.assertEqual(
++            calculate_gravatar_hash(email),
++            calculate_gravatar_hash(email.lower()),
++        )
+ 
+     def test_gravatar_url(self):
+         """
+@@ -37,7 +51,8 @@ class TestGravatarHelperMethods(TestCase):
+         urlp = urlparse(url)
+         qs = parse_qs(urlp.query)
+ 
+-        # Verify the correct query arguments are included with the proper defaults
++        # Verify the correct query arguments are included with the proper
++        # defaults
+         self.assertTrue('s' in qs)
+         self.assertTrue('d' in qs)
+         self.assertTrue('r' in qs)
+@@ -115,7 +130,9 @@ class TestGravatarTemplateTags(TestCase):
+         self.assertTrue('class="gravatar"' in rendered)
+         self.assertTrue('alt=""' in rendered)
+ 
+-        t = Template("{% load gravatar %}{% gravatar email size alt_text css_class %}")
++        t = Template(
++            "{% load gravatar %}{% gravatar email size alt_text css_class %}",
++        )
+         rendered = t.render(context)
+ 
+         self.assertTrue('width="%s"' % (size,) in rendered)
+@@ -153,12 +170,15 @@ class TestGravatarTemplateTags(TestCase):
+         t = Template("{% load gravatar %}{% gravatar email %}")
+         rendered = t.render(context)
+ 
+-        self.assertEqual("", rendered, "Invalid input should return empty result")
++        self.assertEqual(
++            "",
++            rendered,
++            "Invalid input should return empty result",
++        )
+ 
+     def test_gravatar_profile_url(self):
+-        """
+-        Verify the profile url generated from template gravatar_profile_url tag.
+-        """
++        """Verify the profile url generated from template gravatar_profile_url
++        tag."""
+         # class with email attribute
+         class user:
+             email = 'bouke@webatoom.nl'
+@@ -168,4 +188,11 @@ class TestGravatarTemplateTags(TestCase):
+         t = Template("{% load gravatar %}{% gravatar_profile_url user %}")
+         rendered = t.render(context)
+ 
+-        self.assertEqual(rendered, escape(get_gravatar_profile_url(user.email)))
++        self.assertEqual(
++            rendered,
++            escape(
++                get_gravatar_profile_url(
++                    user.email
++                )
++            )
++        )
+diff --git a/setup.py b/setup.py
+index 66c3950..168c04e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -15,6 +15,7 @@ setup(
+     author_email='tristan.waddington@gmail.com',
+     url='https://github.com/twaddington/django-gravatar',
+     packages=['django_gravatar', 'django_gravatar.templatetags'],
++    install_requires=['django',],
+     classifiers=[
+         'Development Status :: 5 - Production/Stable', # 4 Beta, 5 Production/Stable
+         'Environment :: Web Environment',
